@@ -1,28 +1,33 @@
 package com.example.product_comparison.controller;
 
 import com.example.product_comparison.entity.User;
+import com.example.product_comparison.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserController {
 
-    @GetMapping("/user/{id}")
-    public String getUserById(@PathVariable int id){
-        /*由于RESTful风格的接口提倡使用/user/10类似的URL传输参数，而非/user?id=10,此种传参为动态显示的，故需要加上注解@PathVariable，否则只能拿到以?形式传输的参数*/
-        System.out.println(id);
-        return "根据ID获取用户信息";
+    @Autowired
+    private UserMapper userMapper;
+
+    @GetMapping("/user")
+    public List query(){
+        List<User> list=userMapper.selectList(null);
+        System.out.println(list);
+        return list;
     }
+
     @PostMapping("/user")
     public String save(User user){
-        return "添加用户";
-    }
-    @PutMapping("/user")
-    public String update(User user){
-        return "更新用户";
-    }
-    @DeleteMapping("/user/{id}")
-    public String deleteById(@PathVariable int id){
-        System.out.println(id);
-        return "根据ID删除用户";
+        int i = userMapper.insert(user);
+        System.out.println(user);
+        if(i>0){
+            return "success";
+        }else {
+            return "fail";
+        }
     }
 }

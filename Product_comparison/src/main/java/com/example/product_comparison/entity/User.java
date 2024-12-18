@@ -11,7 +11,8 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private String birthday;
+    private String email;
+
 
     @TableField(exist = false)
     private List<Order> orders;
@@ -40,12 +41,12 @@ public class User {
         this.password = password;
     }
 
-    public String getBirthday() {
-        return birthday;
+    public String getEmail() {
+        return email;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Order> getOrders() {
@@ -62,7 +63,7 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", birthday='" + birthday + '\'' +
+                ", email='" + email + '\'' +
                 ", orders=" + orders +
                 '}';
     }

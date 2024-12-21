@@ -2,6 +2,7 @@ package com.example.product_comparison.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.sql.Date;
 
 public class Product {
 
@@ -12,7 +13,8 @@ public class Product {
     private String link;
     private String image;
     private String category;
-    private String source; // 新增字段
+    private String source;
+    private Date date;
 
     // Getters and Setters
     public Long getId() {
@@ -71,6 +73,14 @@ public class Product {
         this.source = source;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -81,6 +91,7 @@ public class Product {
                 ", image='" + image + '\'' +
                 ", category='" + category + '\'' +
                 ", source='" + source + '\'' +
+                ", date=" + date + '\'' +
                 '}';
     }
 }

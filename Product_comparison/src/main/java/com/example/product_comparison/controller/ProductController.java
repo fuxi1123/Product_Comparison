@@ -1,5 +1,6 @@
 package com.example.product_comparison.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.product_comparison.entity.Product;
 import com.example.product_comparison.mapper.ProductMapper;
 import com.example.product_comparison.utils.Result;
@@ -8,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin(origins = "*")
 public class ProductController {
 
     private final ProductMapper productMapper;
@@ -27,7 +30,7 @@ public class ProductController {
     }
 
     /**
-     * 根据商品名称爬取淘宝商品信息，并保存到数据库
+     * 根据商品名称爬取商品信息，并保存到数据库
      *
      * @param query 商品名称
      * @return 爬取的商品信息列表
@@ -40,27 +43,41 @@ public class ProductController {
             // 调用爬虫服务
             List<Map<String, String>> products = restTemplate.getForObject(url, List.class);
 
-            List<Map<String, String>> enrichedProducts = new ArrayList<>();
+            List<Product> savedProducts = new ArrayList<>();
             if (products != null) {
                 for (Map<String, String> productData : products) {
-                    // 保存到数据库
+                    // 构建 Product 对象
                     Product product = new Product();
                     product.setTitle(productData.get("title"));
                     product.setPrice(productData.get("price"));
                     product.setLink(productData.get("link"));
                     product.setImage(productData.get("image"));
                     product.setCategory(query);
-                    product.setSource("淘宝"); // 设置来源为 "淘宝"
-                    productMapper.insert(product);
+                    product.setSource(productData.get("source"));
+                    product.setDate(new Date(System.currentTimeMillis()));
 
-                    // 增加 source 字段返回前端
-                    productData.put("source", "淘宝");
-                    enrichedProducts.add(productData);
+                    // 保存到数据库
+                    productMapper.insert(product);
+                    savedProducts.add(product);
                 }
             }
-            return Result.ok().data("products", enrichedProducts);
+
+            return Result.ok().data("products", savedProducts);
         } catch (Exception e) {
             return Result.error().message("Failed to scrape products").data("details", e.getMessage());
         }
     }
+
+    @GetMapping("/history")
+    public Result getProductHistory(@RequestParam String title) {
+        try {
+            QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("title", title).orderByAsc("date");
+            List<Product> history = productMapper.selectList(queryWrapper);
+            return Result.ok().data("history", history);
+        } catch (Exception e) {
+            return Result.error().message("Failed to fetch product history").data("details", e.getMessage());
+        }
+    }
+
 }

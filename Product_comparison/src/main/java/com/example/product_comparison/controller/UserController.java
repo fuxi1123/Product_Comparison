@@ -42,7 +42,8 @@ public class UserController {
         // 生成 Token
         String token = JwtUtils.generateToken(existingUser.getUsername());
         // 返回登录成功的结果
-        return Result.ok().data("token", token).message("Login successful");
+        System.out.println(existingUser.getId());
+        return Result.ok().data("userId", existingUser.getId()).data("email", existingUser.getEmail()).data("token", token).message("Login successful");
     }
 
     @GetMapping("/info")    //"token:xxx"
@@ -92,33 +93,4 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-    @GetMapping("/user/findAll")
-    public List<User> find(){
-        return userMapper.selectAllUserAndOrders();
-    }
-
-    @GetMapping("/user/find")
-    public List<User> findByCond(){
-        QueryWrapper<User> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("username","zhangsan");
-        return userMapper.selectList(queryWrapper);
-    }
-
-    @GetMapping("/user/findByPage")
-    public IPage findByPage(){
-        Page<User> page = new Page<>(0,2);
-        IPage iPage = userMapper.selectPage(page,null);
-        return iPage;
-    }
-
-    @PostMapping("/user")
-    public String save(User user){
-        int i = userMapper.insert(user);
-        System.out.println(user);
-        if(i>0){
-            return "success";
-        }else {
-            return "fail";
-        }
-    }
 }

@@ -14,9 +14,6 @@ public class User {
     private String email;
 
 
-    @TableField(exist = false)
-    private List<Order> orders;
-
     public int getId() {
         return id;
     }
@@ -49,13 +46,6 @@ public class User {
         this.email = email;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
 
     @Override
     public String toString() {
@@ -64,7 +54,6 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", orders=" + orders +
                 '}';
     }
 }

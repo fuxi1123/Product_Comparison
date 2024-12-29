@@ -18,6 +18,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -61,6 +66,11 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.20</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!--数据连接池druid-->
 
     </dependencies>
@@ -94,7 +104,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.example.product_comparison.ProductComparisonApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
